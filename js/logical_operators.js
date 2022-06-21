@@ -56,29 +56,29 @@ console.log(1 && 2 && 3); // 3, the last one
 // Converts the operand to boolean type: true/false .
 // Returns the inverse value.
 
-alert(!true); // false
-alert(!0); // true
+console.log(!true); // false
+console.log(!0); // true
 
 // A double NOT !! is sometimes used for converting a value to boolean type
 
-alert(!!"non-empty string"); // true
-alert(!!null); // false
+console.log(!!"non-empty string"); // true
+console.log(!!null); // false
 
 // ---------
 // Nullish coalescing operation '??'
 // ---------
 
 let user;
-alert(user ?? "Anonymous"); // Anonymous (user not defined)
+console.log(user ?? "Anonymous"); // Anonymous (user not defined)
 
 let user2 = "John";
-alert(user2 ?? "Anonymous"); // John (user defined)
+console.log(user2 ?? "Anonymous"); // John (user defined)
 
 let firstName2 = null;
 let lastName2 = null;
 let nickName2 = "Supercoder";
 // shows the first defined value:
-alert(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
+console.log(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
 
 // ---------
 // Comparasion with '||'
@@ -88,5 +88,5 @@ alert(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
 // ?? returns the first defined value.
 let height = 0;
 
-alert(height || 100); // 100
-alert(height ?? 100); // 0
+console.log(height || 100); // 100
+console.log(height ?? 100); // 0
