@@ -63,3 +63,30 @@ alert(!0); // true
 
 alert(!!"non-empty string"); // true
 alert(!!null); // false
+
+// ---------
+// Nullish coalescing operation '??'
+// ---------
+
+let user;
+alert(user ?? "Anonymous"); // Anonymous (user not defined)
+
+let user2 = "John";
+alert(user2 ?? "Anonymous"); // John (user defined)
+
+let firstName2 = null;
+let lastName2 = null;
+let nickName2 = "Supercoder";
+// shows the first defined value:
+alert(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
+
+// ---------
+// Comparasion with '||'
+// ---------
+
+// || returns the first truthy value.
+// ?? returns the first defined value.
+let height = 0;
+
+alert(height || 100); // 100
+alert(height ?? 100); // 0
