@@ -13,9 +13,9 @@ console.log(true || false); // true
 console.log(false || false); // false
 
 // Finding the first truthy value
-let firstName = "";
-let lastName = "";
-let nickName = "SuperCoder";
+const firstName = "";
+const lastName = "";
+const nickName = "SuperCoder";
 console.log(firstName || lastName || nickName || "Anonymous"); // SuperCoder
 
 // Short-circuit evaluation
@@ -68,15 +68,15 @@ console.log(!!null); // false
 // Nullish coalescing operation '??'
 // ---------
 
-let user;
+const user = undefined;
 console.log(user ?? "Anonymous"); // Anonymous (user not defined)
 
-let user2 = "John";
+const user2 = "John";
 console.log(user2 ?? "Anonymous"); // John (user defined)
 
-let firstName2 = null;
-let lastName2 = null;
-let nickName2 = "Supercoder";
+const firstName2 = null;
+const lastName2 = null;
+const nickName2 = "Supercoder";
 // shows the first defined value:
 console.log(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
 
@@ -86,7 +86,7 @@ console.log(firstName2 ?? lastName2 ?? nickName2 ?? "Anonymous"); // Supercoder
 
 // || returns the first truthy value.
 // ?? returns the first defined value.
-let height = 0;
+const height = 0;
 
 console.log(height || 100); // 100
 console.log(height ?? 100); // 0
