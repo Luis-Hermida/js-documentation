@@ -29,7 +29,7 @@ user.f(); // John (this == user)
 admin.f(); // Admin (this == admin)
 admin["f"](); // Admin (dot or square brackets access the method – doesn't matter)
 
-// Arrow functions have no this
+// Arrow functions have no this value
 user = {
   firstName: "Ilya",
   sayHi() {
