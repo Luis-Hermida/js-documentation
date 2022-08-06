@@ -29,3 +29,10 @@ console.log(bigint + BigInt(number)); // 3
 
 // bigint to number
 console.log(Number(bigint) + number); // 3
+
+// We can add a separator in the numbers as they get ignored
+let billion = 1_000_000_000;
+
+// Letter e we can shorten a number by specifying the zeroes count after the e
+billion = 1e9; // 1 billion, literally: 1 and 9 zeroes
+let mcs = 1e-6; // 0.000001, e letter can be a negative value
