@@ -1,4 +1,4 @@
-let arr, removed, arrayLike;
+let arr, removed, arrayLike, users, army, soldiers;
 // ---------
 // Add a remove elements
 // ---------
@@ -65,6 +65,51 @@ console.log(arr.concat(arrayLike)); // 1,2,something,else
 // Search among elements
 // ---------
 
+// indexOf/lastIndexOf and includes
+// arr.indexOf(item, from) – looks for item starting from index from , and returns the index where it was found, otherwise -1
+// arr.lastIndexOf(item, from) – same, but looks for from right to left
+// arr.includes(item, from) – looks for item starting from index from , returns true if found.
+arr = [1, 0, false];
+console.log(arr.indexOf(0)); // 1
+console.log(arr.indexOf(false)); // 2
+console.log(arr.indexOf(null)); // -1
+console.log(arr.includes(1, 1)); // false
+
+// find and findIndex
+// let us find a single element with an specific condition
+// arr.find(function(item, index, array) {
+// if true is returned, item is returned and iteration is stopped
+// for falsy scenario returns undefined
+// });
+
+// item is the element.
+// index is its index.
+// array is the array itself.
+
+// If it returns true , the search is stopped, the item is returned. If nothing found, undefined is returned
+users = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Pete" },
+  { id: 1, name: "Mary" },
+];
+let user = users.find((item) => item.id == 1);
+console.log(user.name); // John
+
+// arr.findIndex  method is essentially the same, but it returns the index where the element
+// was found instead of the element itself and -1 is returned when nothing is found
+
+// filter
+// Similar as find but it let us find multiple elements
+// The syntax is also similar to find , but filter returns an array of all matching elements
+users = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Pete" },
+  { id: 3, name: "Mary" },
+];
+// returns array of the first two users
+let someUsers = users.filter((item) => item.id < 3);
+console.log(someUsers.length); // 2
+
 // ---------
 // Iterate over elements
 // ---------
@@ -99,7 +144,7 @@ console.log(Array.isArray([])); // true
 // arr.filter(func, thisArg);
 // arr.map(func, thisArg);
 
-let army = {
+army = {
   minAge: 18,
   maxAge: 27,
   canJoin(user) {
@@ -107,10 +152,10 @@ let army = {
   },
 };
 
-let users = [{ age: 16 }, { age: 20 }, { age: 23 }, { age: 30 }];
+users = [{ age: 16 }, { age: 20 }, { age: 23 }, { age: 30 }];
 
 // find users, for who army.canJoin returns true
-let soldiers = users.filter(army.canJoin, army);
+soldiers = users.filter(army.canJoin, army);
 
 // Without thisArg of army
 // it will run the army.canJoin as a standalone function and fail on this because this=undefined
