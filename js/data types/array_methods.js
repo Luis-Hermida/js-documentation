@@ -69,6 +69,14 @@ console.log(arr.concat(arrayLike)); // 1,2,something,else
 // Iterate over elements
 // ---------
 
+// forEach allows to run a function for every element of the array
+// arr.forEach(function(item, index, array) {
+// ... do something with item
+// });
+["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
+  console.log(`${item} is at index ${index} in ${array}`);
+});
+
 // ---------
 // Transform the array
 // ---------
@@ -76,3 +84,38 @@ console.log(arr.concat(arrayLike)); // 1,2,something,else
 // ---------
 // Additionally
 // ---------
+
+// Array.isArray
+// Arrays do not form a separate language type. They are based on objects
+console.log(typeof {}); // object
+console.log(typeof []); // object
+
+console.log(Array.isArray({})); // false
+console.log(Array.isArray([])); // true
+
+// thisArg
+// Almost array methods that call functions except for sort can accept an additional parameter thisArg
+// arr.find(func, thisArg);
+// arr.filter(func, thisArg);
+// arr.map(func, thisArg);
+
+let army = {
+  minAge: 18,
+  maxAge: 27,
+  canJoin(user) {
+    return user.age >= this.minAge && user.age < this.maxAge;
+  },
+};
+
+let users = [{ age: 16 }, { age: 20 }, { age: 23 }, { age: 30 }];
+
+// find users, for who army.canJoin returns true
+let soldiers = users.filter(army.canJoin, army);
+
+// Without thisArg of army
+// it will run the army.canJoin as a standalone function and fail on this because this=undefined
+// let soldiers = users.filter(army.canJoin);
+
+console.log(soldiers.length); // 2
+console.log(soldiers[0].age); // 20
+console.log(soldiers[1].age); // 23
