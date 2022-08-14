@@ -78,4 +78,4 @@ let prices = Object.fromEntries([
   ["meat", 4],
 ]);
 // now prices = { banana: 1, orange: 2, meat: 4 }
-alert(prices.orange); // 2
+console.log(prices.orange); // 2
