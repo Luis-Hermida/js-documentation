@@ -163,15 +163,15 @@ for (let name of arr) {
 }
 // second argument
 arr = "Bilbo, Gandalf, Nazgul, Saruman".split(", ", 2);
-alert(arr); // Bilbo,
+console.log(arr); // Bilbo,
 // empty string
 str = "test";
-alert(str.split("")); // t,e,s,t
+console.log(str.split("")); // t,e,s,t
 
 // join
 arr = ["Bilbo", "Gandalf", "Nazgul"];
 str = arr.join(";"); // glue the array into a string using ;
-alert(str); // Bilbo;Gandalf;Nazgul
+console.log(str); // Bilbo;Gandalf;Nazgul
 
 // reduce and reduceRight
 // They are used to calculate a single value based on the array
@@ -187,7 +187,7 @@ alert(str); // Bilbo;Gandalf;Nazgul
 */
 arr = [1, 2, 3, 4, 5];
 let result = arr.reduce((sum, current) => sum + current, 0);
-alert(result); // 15
+console.log(result); // 15
 
 // ---------
 // Additionally
