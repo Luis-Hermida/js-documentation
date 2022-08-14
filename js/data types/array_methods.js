@@ -126,6 +126,69 @@ console.log(someUsers.length); // 2
 // Transform the array
 // ---------
 
+// map calls the function for each element of the array and returns the array of results
+// let result = arr.map(function (item, index, array) {
+//   // returns the new value instead of item
+// });
+let lengths = ["Bilbo", "Gandalf", "Nazgul"].map((item) => item.length);
+console.log(lengths); // 5,7,6
+
+// arr.sort() sorts the array in place, changing its element order
+arr = [1, 2, 5];
+arr.sort();
+console.log(arr); // 1, 15, 2 - Items are sorted as strings by default.
+
+// Own sorting
+function compare(a, b) {
+  if (a > b) return 1; // if the first value is greater than the second
+  if (a == b) return 0; // if values are equal
+  if (a < b) return -1; // if the first value is less than the second
+}
+arr = [1, 2, 15];
+arr.sort(compareNumeric);
+console.log(arr); // 1, 2, 15
+// !! Use localeCompare for strings
+
+// reverse
+arr = [1, 2, 3, 4, 5];
+aarr.reverse();
+console.log(arr); // 5,4,3,2,1
+
+// split and join
+// split
+names = "Bilbo, Gandalf, Nazgul";
+arr = names.split(", ");
+for (let name of arr) {
+  console.log(`A message to ${name}.`); // A message to Bilbo (and other names)
+}
+// second argument
+arr = "Bilbo, Gandalf, Nazgul, Saruman".split(", ", 2);
+alert(arr); // Bilbo,
+// empty string
+str = "test";
+alert(str.split("")); // t,e,s,t
+
+// join
+arr = ["Bilbo", "Gandalf", "Nazgul"];
+str = arr.join(";"); // glue the array into a string using ;
+alert(str); // Bilbo;Gandalf;Nazgul
+
+// reduce and reduceRight
+// They are used to calculate a single value based on the array
+// let value = arr.reduce(function(accumulator, item, index, array) {
+//   // ...
+// }, [initial]);
+/*
+  accumulator – is the result of the previous function call, equals initial the first time (if
+  initial is provided).
+  item – is the current array item.
+  index – is its position.
+  array – is the array
+*/
+arr = [1, 2, 3, 4, 5];
+let result = arr.reduce((sum, current) => sum + current, 0);
+alert(result); // 15
+
 // ---------
 // Additionally
 // ---------
