@@ -20,7 +20,7 @@ john = null; // overwrite the reference
 // Main application of WeakMap is additional data storage
 // We put the data to a WeakMap , using the object as the key, and when the object is garbage
 // collected, that data will automatically disappear as well
-weakMap.set(john, "secret documents");
+// weakMap.set(john, "secret documents"); // Error john is null
 // If John dies, secret documents will be destroyed automatically
 
 // For instance, we have code that keeps a visit count for users. The information is stored in a map:
