@@ -108,3 +108,76 @@ for (let i = 0; i < 100000; i++) {
 }
 end = Date.now(); // done
 console.log(`The loop took ${end - start} ms`); // subtract numbers, not dates
+
+// Date.parse from a tring
+// The method Date.parse(str) can read a date from a string using this format
+// YYYY-MM-DDTHH:mm:ss.sssZ
+// - YYYY-MM-DD – is the date: year-month-day
+// - The character "T" is used as the delimiter
+// - HH:mm:ss.sss – is the time: hours, minutes, seconds and milliseconds.
+// - The optional 'Z' part denotes the time zone in the format +-hh:mm
+ms = Date.parse("2012-01-26T13:51:50.417-07:00");
+console.log(ms); // 1327611110417 (timestamp)
+// We can instantly create a new Date object from the timestamp:
+date = new Date(Date.parse("2012-01-26T13:51:50.417-07:00"));
+console.log(date);
+
+// Benchmarking - Performance measurements
+// we have date1 and date2, which function faster returns their difference in ms?
+function diffSubtract(date1, date2) {
+  return date2 - date1;
+}
+
+// or
+function diffGetTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
+}
+
+function bench(f) {
+  let date1 = new Date(0);
+  let date2 = new Date();
+  let start = Date.now();
+  for (let i = 0; i < 100000; i++) f(date1, date2);
+  return Date.now() - start;
+}
+
+console.log("Time of diffSubtract: " + bench(diffSubtract) + "ms");
+console.log("Time of diffGetTime: " + bench(diffGetTime) + "ms");
+
+// For more reliable benchmarking, the whole pack of benchmarks should be rerun
+// multiple times
+
+let time1 = 0;
+let time2 = 0;
+// run bench(diffSubtract) and bench(diffGetTime) each 10 times alternating
+/* for (let i = 0; i < 10; i++) {
+  time1 += bench(diffSubtract);
+  time2 += bench(diffGetTime);
+} */
+
+// Modern JavaScript engines start applying advanced optimizations only to "hot code" that
+// executes many times (no need to optimize rarely execuded things). So, in the example above, first
+// executions are not well-optimized. We want to add a heat-up run:
+// added for "heating up" prior to the main loop
+bench(diffSubtract);
+bench(diffGetTime);
+
+// now benchmark
+for (let i = 0; i < 10; i++) {
+  time1 += bench(diffSubtract);
+  time2 += bench(diffGetTime);
+}
+
+console.log("Total time for diffSubtract: " + time1);
+console.log("Total time for diffGetTime: " + time2);
+
+// Warning
+/*
+  Modern JavaScript engines perform many optimizations. They may tweak results of "aritificial
+  tests" compared to "normal usage", especially when we benchmark something very small,
+  such as how an operator works, or a built-in function. So if you seriously want to understand
+  performance, then study how the JavaScript engine works. And then you probably
+  won't need microbenmarks at all.
+
+  (http://mrale.ph/)
+*/
