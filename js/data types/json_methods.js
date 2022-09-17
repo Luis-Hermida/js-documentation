@@ -1,4 +1,4 @@
-let student, json;
+let student, json, room, meetup;
 // JSON.stringify Creation
 /*
     The JSON (JavaSacript Object Notation) is a general format to represent values and objects. It
@@ -90,11 +90,11 @@ console.log(typeof json); // string
 
     If we pass an array of properties to it, only these properties will be encoded.
 */
-let room = {
+room = {
   number: 23,
 };
 
-let meetup = {
+meetup = {
   title: "Conference",
   participants: [{ name: "John" }, { name: "Alice" }],
   place: room, // meetup references room
@@ -152,3 +152,106 @@ for JSON.stringify(user, null, 4) the result would be more indented:
             }
         }
 */
+
+// Custom "toJSON"
+/*
+    Like 'toString' for string conversion, an object may provide method 'toJSON' for to-JSON
+    conversion. 'JSON.stringify' automatically calls it if available.
+*/
+room = {
+  number: 23,
+};
+meetup = {
+  title: "Conference",
+  date: new Date(Date.UTC(2017, 0, 1)),
+  room,
+};
+console.log(JSON.stringify(meetup));
+/*
+    {
+    "title":"Conference",
+    "date":"2017-01-01T00:00:00.000Z", // (1)
+    "room": {"number":23} // (2)
+    }
+*/
+
+/*
+    Here we can see that 'date' became a string. That's because all dates have a built-in
+    'toJSON' method which returns such kind of string.
+
+    Now let's add a custom 'toJSON' for our object 'room'
+*/
+room = {
+  number: 23,
+  toJSON() {
+    return this.number;
+  },
+};
+
+meetup = {
+  title: "Conference",
+  room,
+};
+console.log(JSON.stringify(room)); // 23
+console.log(JSON.stringify(meetup));
+/*
+    {
+    "title":"Conference",
+    "room": 23
+    }
+*/
+// As we can see, 'toJSON' is used both for the direct call JSON.stringify(room) and when
+// 'roo' is nested in another encoded object.
+
+// JSON.parse
+// To decode a JSON-string, we need another method named JSON.parse
+// let value = JSON.parse(str, [reviver]);
+// str - JSON-string to parse.
+// reviver - optional function(key, value) that will be called for each '(key, value)' pair and can
+// transform the value
+userData =
+  '{ "name": "John", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
+user = JSON.parse(userData);
+console.log(user.friends[1]); // 1
+
+/*
+    Common JSON mistakes
+    let json = `{
+    name: "John",                     // mistake: property name without quotes
+    "surname": 'Smith',               // mistake: single quotes in value (must be double)
+    'isAdmin': false                  // mistake: single quotes in key (must be double)
+    "birthday": new Date(2000, 2, 3), // mistake: no "new" is allowed, only bare values
+    "friends": [0,1,2,3]              // here all fine
+    }`;
+*/
+
+/*
+    Reviver
+    The value of meetup.date is a string, not a Date object. How could JSON.parse know that
+    it should transform that string into a Date.
+
+    Let’s pass to JSON.parse the reviving function as the second argument, that returns all values
+    “as is”, but date will become a Date
+*/
+str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
+meetup = JSON.parse(str, function (key, value) {
+  if (key == "date") return new Date(value);
+  return value;
+});
+
+console.log(meetup.date.getDate());
+
+// It works for nested objects as well
+schedule = `{
+    "meetups": [
+    {"title":"Conference","date":"2017-11-30T12:00:00.000Z"},
+    {"title":"Birthday","date":"2017-04-18T12:00:00.000Z"}
+    ]
+    }`;
+
+schedule = JSON.parse(schedule, function (key, value) {
+  if (key == "date") return new Date(value);
+  return value;
+});
+
+console.log(schedule.meetups[1].date.getDate()); // works!
