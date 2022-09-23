@@ -128,7 +128,7 @@ sayHi();
 */
 (function () {
   var message = "Hello";
-  alert(message); // Hello
+  console.log(message); // Hello
 })();
 /*
     Here, a Function Expression is created and immediately called. So the code executes right away
@@ -142,7 +142,7 @@ sayHi();
     // Tries to declare and immediately call a function
     function() { // <-- SyntaxError: Function statements require a function name
     var message = "Hello";
-    alert(message); // Hello
+    console.log(message); // Hello
     }();
 
     // Even with a name JavaScript does not allow Function Declarations to be called immediately:
@@ -156,17 +156,17 @@ sayHi();
 */
 // Ways to create IIFE
 (function () {
-  alert("Parentheses around the function");
+  console.log("Parentheses around the function");
 })();
 
 (function () {
-  alert("Parentheses around the whole thing");
+  console.log("Parentheses around the whole thing");
 })();
 
 !(function () {
-  alert("Bitwise NOT operator starts the expression");
+  console.log("Bitwise NOT operator starts the expression");
 })();
 
 +(function () {
-  alert("Unary plus starts the expression");
+  console.log("Unary plus starts the expression");
 })();

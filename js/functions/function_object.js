@@ -205,3 +205,24 @@ sayHi = function func(who) {
   }
 };
 sayHi(); // Hello, Guest
+
+// The problem with that code is that 'sayHi' may change in the outer code. If the function gets
+// assigned to another variable instead, the code will start to give errors:
+sayHi = function (who) {
+  if (who) {
+    console.log(`Hello, ${who}`);
+  } else {
+    // sayHi("Guest"); // Error: sayHi is not a function
+  }
+};
+let welcome = sayHi;
+sayHi = null;
+// welcome(); // Error, the nested sayHi call doesn't work any more!
+
+// This happens because the function takes 'sayHi' from its outer lexical environment. There's no
+// local 'sayHi', so the outer variable is used.
+
+/*
+    Information: The "internal name" feature described here is only available for Function Expressions, not for
+    Function declarations. For Function Declarations, there is no syntax for adding an "internal" name.
+*/
