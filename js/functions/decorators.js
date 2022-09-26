@@ -57,7 +57,6 @@ console.log("Again: " + slow(2)); // slow(2) result returned from cache
 /*
     The caching decorator mentioned before is not suited to work with object methods.
 */
-// we'll make worker.slow caching
 let worker = {
   someMethod() {
     return 1;
@@ -73,6 +72,7 @@ let worker = {
 // same code as before
 function cachingDecorator(func) {
   let cache = new Map();
+
   return function (x) {
     if (cache.has(x)) {
       return cache.get(x);
@@ -109,6 +109,7 @@ console.log(worker.slow(2)); // Whoops! Error: Cannot read property 'someMethod'
 // same code as before
 function cachingDecorator(func) {
   let cache = new Map();
+
   return function (x) {
     if (cache.has(x)) {
       return cache.get(x);
@@ -161,9 +162,11 @@ worker = {
   },
 };
 
-function cachingDecorator(func, hash) {
+function cachingDecoratorWithHash(func, hash) {
+  // console.log(this); // Global object
   let cache = new Map();
   return function () {
+    // console.log(this); // Worker object with slow function
     let key = hash(arguments); // Calling hash function to get a single key.
     if (cache.has(key)) {
       return cache.get(key);
@@ -173,12 +176,14 @@ function cachingDecorator(func, hash) {
     return result;
   };
 }
+
+worker.slow = cachingDecoratorWithHash(worker.slow, hash);
+console.log(worker.slow(3, 5)); // works
+console.log("Again " + worker.slow(3, 5)); // same (cached)
+
 function hash(args) {
   return args[0] + "," + args[1];
 }
-worker.slow = cachingDecorator(worker.slow, hash);
-console.log(worker.slow(3, 5)); // works
-console.log("Again " + worker.slow(3, 5)); // same (cached)
 /*
     Now it works with any number of arguments, (though the has function would also need to be
     adjusted to allow any number of arguments)
