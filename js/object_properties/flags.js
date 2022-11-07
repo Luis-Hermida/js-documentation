@@ -47,10 +47,10 @@ Object.defineProperty(user, "name", {
 descriptor = Object.getOwnPropertyDescriptor(user, "name");
 console.log(JSON.stringify(descriptor, null, 2));
 /*
-{
-"value": "John",
-"writable": false,
-"enumerable": false,
-"configurable": false
-}
+    {
+        "value": "John",
+        "writable": false,
+        "enumerable": false,
+        "configurable": false
+    }
 */
