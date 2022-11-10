@@ -101,3 +101,71 @@ console.log(admin.fullName); // Alice Cooper, state of admin modified
 console.log(admin.surname); // Alice Cooper, state of admin modified
 
 console.log(user.fullName); // John Smith, state of user protected
+
+// The value of 'this'
+/*
+    No matter where the method is found: in an object or its prototype. In a method call, this
+    is always the object before the dot
+
+    So, the setter call admin.fullName= uses admin as this , not user.
+*/
+// animal has methods
+let animal2 = {
+  walk() {
+    if (!this.isSleeping) {
+      console.log(`I walk`);
+    }
+  },
+  sleep() {
+    this.isSleeping = true;
+  },
+};
+
+rabbit = {
+  name: "White Rabbit",
+  __proto__: animal2,
+};
+
+// modifies rabbit.isSleeping
+rabbit.sleep();
+console.log(rabbit.isSleeping); // true
+console.log(animal.isSleeping); // undefined (no such property in the prototype)
+
+/*
+    If we had other objects, like bird , snake , etc., inheriting from animal , they would also gain
+    access to methods of animal . But this in each method call would be the corresponding
+    object, evaluated at the call-time (before dot), not animal . So when we write data into this , it
+    is stored into these objects.
+
+    As a result, methods are shared, but the object state is not.
+*/
+
+// for..in loop
+
+// Object.keys only returns own keys
+console.log(Object.keys(rabbit)); // jumps
+
+// for..in loops over both own and inherited keys
+for (let prop in rabbit) console.log(prop); // jumps, then eats
+
+// We can also use 'obj.hasOwnProperty(key)' to exclude inherited properties.
+for (let prop in rabbit) {
+  let isOwn = rabbit.hasOwnProperty(prop);
+  if (isOwn) {
+    console.log(`Our: ${prop}`); // Our: jumps
+  } else {
+    console.log(`Inherited: ${prop}`); // Inherited: eats
+  }
+}
+/*
+    Note, there’s one funny thing. Where is the method rabbit.hasOwnProperty coming from?
+    We did not define it. Looking at the chain we can see that the method is provided by
+    Object.prototype.hasOwnProperty . In other words, it’s inherited.
+
+    ...But why does hasOwnProperty not appear in the for..in loop like eats and jumps
+    do, if for..in lists inherited properties?
+
+    The answer is simple: it’s not enumerable. Just like all other properties of Object.prototype,
+    it has enumerable:false flag. And for..in only lists enumerable properties. That’s why it
+    and the rest of the Object.prototype properties are not listed.
+*/
