@@ -79,7 +79,7 @@ console.log(dog2.constructor);
 /*
     That’s handy when we have an object, don’t know which constructor was used for it (e.g. it comes
     from a 3rd party library), and we need to create another one of the same kind.
-m
+
     But probably the most important thing about "constructor" is that JavaScript itself does not ensure
     the right "constructor" value.
 
