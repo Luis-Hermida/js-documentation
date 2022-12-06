@@ -120,6 +120,17 @@ obj2[key2] = "some value";
 console.log(obj[key]); // "some value"
 
 // console.log(obj2); // Error (no toString)
+/*
+    Solution: Add toString to the object.
+
+    let dictionary = Object.create(null, {
+        toString: { // define toString property
+            value() { // the value is a function
+                return Object.keys(this).join();
+            }
+        }
+    });
+*/
 
 // Note that most object-related methods are 'Object.something(...)', like
 // 'Object.keys(obj)' - they are not int the prototype, so they will keep working on such objects.
