@@ -136,3 +136,155 @@ user2.sayHi(); // John
 
     The 'class' syntax brings many other features and there are other differences.
 */
+
+///////////////////
+// Class Expression
+///////////////////
+/*
+    Just like functions, classes can be defined inside another expression, passed around, returned,
+    assigned, etc.
+
+    Example of class expression:
+    let User = class {
+        sayHi() {
+            console.log("Hello");
+        }
+    };
+
+
+    Similar to Named Function Expressions, class epxressions may have a name. If a class expression
+    has a name, it's visible inside the class only.
+*/
+// "Named Class Expression"
+// (no such term in the spec, but that's similar to Named Function Expression)
+let User3 = class MyClass {
+  sayHi() {
+    console.log(MyClass); // MyClass name is visible only inside the class
+  }
+};
+
+new User3().sayHi(); // works, shows MyClass definition
+//console.log(MyClass); // error, MyClass name isn't visible outside of the class
+
+// We can even make classes dynamically "on-demand", like this:
+function makeClass(phrase) {
+  // declare a class and return it
+  return class {
+    sayHi() {
+      console.log(phrase);
+    }
+  };
+}
+// Create a new class
+let User4 = makeClass("Hello");
+new User4().sayHi(); // Hello
+
+//////////////////////
+// Getters and Setters
+//////////////////////
+// Just like literal objects, classes may include getters/setters, computed properties etc.
+
+class User5 {
+  constructor(name) {
+    // invokes the setter
+    this.name = name;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(value) {
+    if (value.length < 4) {
+      console.log("Value is too short.");
+      return;
+    }
+    this._name = `${value} - User5`;
+  }
+}
+
+let user5 = new User5("John");
+console.log(user5.name);
+
+/////////////////
+// Computed names
+/////////////////
+
+class User6 {
+  ["say" + "Hi"]() {
+    console.log("Hello");
+  }
+}
+
+new User6().sayHi();
+
+///////////////
+// Class fields
+///////////////
+/*
+    Old browser may need a polyfill - class fields are a recent addition to the language.
+
+    "Class fields" is a syntax that allows to add any properties.
+
+    We just write " = " in the declaration, and that’s it.
+
+    The important difference of class fields is that they are set on individual objects, not
+    User.prototype
+*/
+
+class User7 {
+  name = "John";
+
+  sayHi() {
+    console.log(`Hello ${this.name}!`);
+  }
+}
+
+let user7 = new User7();
+user7.sayHi(); // Hello, John.
+console.log(User7.prototype.name); // undefined
+
+//////////////////////////////////
+// Bound methods with class fields
+//////////////////////////////////
+/*
+    As demostrated in the chapter 'functions/binding' functions in JavaScript have a dynamic this.
+    It depends on the context of the call.
+
+    So if an object is passed around and called in another context, 'this' won't be a
+    reference to its object any more.  
+*/
+
+class Button {
+  constructor(value) {
+    this.value = value;
+  }
+  click() {
+    console.log(this.value);
+  }
+}
+
+let button = new Button("hello");
+setTimeout(button.click, 1000); // undefined
+
+/*
+    As discussed in 'functions/binding' there are 2 approaches to fix losing this.
+    1. Pass a wrapper-function, such a 'setTimeout(() => button.click(), 1000)'.
+    2. Bind the method to object, e.g. in the constructor
+
+
+    The class field click = () => {...} is created on a per-object basis, there’s a separate
+    function for each Button object, with this inside it referencing that object. We can pass
+    button.click around anywhere, and the value of this will always be correct.
+*/
+
+class Button2 {
+  constructor(value) {
+    this.value = value;
+  }
+  click = () => {
+    console.log(this.value);
+  };
+}
+let button2 = new Button2("hello");
+setTimeout(button2.click, 1000); // hello
