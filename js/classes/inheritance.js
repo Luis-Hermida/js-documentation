@@ -145,3 +145,76 @@ rabbit2.stop(); // White Rabbit stands still. White Rabbit hides!
     // Unexpected super
     setTimeout(function() { super.stop() }, 1000);
 */
+
+/////////////////////////
+// Overrriding contructor
+/////////////////////////
+/*
+    Until now, 'Rabbit didn't have its own 'contructor'.
+
+    According to the specification, if a class extends another class and has no 'contructor',
+    then the following "empty" 'contructor is generated:
+
+    class Rabbit extends Animal {
+        // generated for extending classes without own constructors
+        constructor(...args) {
+            super(...args);
+        }
+    }
+
+    As we can see, it basically calls the parent 'contructor' passing it all the arguments. That
+    happens if we don't write a contructor of our own.
+
+    Now let's add a custom constructor to 'Rabbit'. It will specify the 'earLength' in addition to
+    'name':
+*/
+
+class Rabbit3 extends Animal {
+  constructor(name, earLength) {
+    this.speed = 0;
+    this.name = name;
+    this.earLength = earLength;
+  }
+
+  hide() {
+    console.log(`${this.name} hides!`);
+  }
+
+  stop() {
+    super.stop(); // call parent stop
+    this.hide(); // and then hide
+  }
+}
+
+// Doesn't work !!!
+// let rabbit3 = new Rabbit3("White Rabbit", 10); // Error: this is not defined.
+
+/*
+    Constructors in inheriting classes must call 'super(...)', and (!) do it before using
+    'this'.
+
+    In JavaScript, there's a distinction between a constructor function of an inheriting class (so-called
+    "derived constructor") and other functions. A derived contructor has a special internal property
+    [[ContructorKind]]: "derived". That's a special internal label.
+
+    That label affects its behavior with 'new'.
+    - When a regular function is executed with 'new', it creates an empty object and assigns it to
+    'this'.
+    - But when a derived constructor runs, it doesn't do this. It expects the parent constructor to do
+    this job.
+
+    So a derived constructor must call super in order to execute its parent (base) constructor,
+    otherwise the object for this won’t be created. And we’ll get an error.
+
+    For the Rabbit constructor to work, it needs to call super() before using this , like here
+*/
+class Rabbit4 extends Animal {
+  constructor(name, earLength) {
+    super(name);
+    this.earLength = earLength;
+  }
+}
+
+let rabbit4 = new Rabbit4("White Rabbit", 10);
+console.log(rabbit4.name); // White Rabbit
+console.log(rabbit4.earLength); // 10
