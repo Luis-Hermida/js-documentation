@@ -9,7 +9,10 @@
 // "extends" keyword
 ////////////////////
 class Animal {
+  type = "animal";
+
   constructor(name) {
+    console.log(this.type);
     this.speed = 0;
     this.name = name;
   }
@@ -218,3 +221,70 @@ class Rabbit4 extends Animal {
 let rabbit4 = new Rabbit4("White Rabbit", 10);
 console.log(rabbit4.name); // White Rabbit
 console.log(rabbit4.earLength); // 10
+
+//////////////////////////
+// Overriding class fields
+//////////////////////////
+
+/*
+    We can override not onle methods, but also class fields.
+
+    Although, there's a tricky behavior when we access an overriden field in parent constructor,
+    quite different from most other programming languages.
+
+    Here, class 'Rabbit' extends 'Animal' and overrides the 'name' field with its own value.
+
+    There's no own contructor in 'Rabbit', so 'Animal' contructor is called.
+
+    What's interesting is that in both cases: 'new Animal()' and 'new Rabbit()' and shows 'animal',
+
+    In other words, the parent constructor always uses its own field value, not the overriden
+    one.
+*/
+class Rabbit5 extends Animal {
+  type = "rabbit";
+}
+new Animal(); // animal
+new Rabbit(); // animal
+
+/*
+    Instead of having 'this.name' field we call 'this.showName()' method.
+
+    Note that the output is different and that's what we naturally expect. When the parent
+    constructor is called in the derived class, it uses the overriden method. But for class
+    fields it's not so, the parent constructor always uses the parent field.
+
+    The reason for the difference is because of the field initialization order. The
+    class field is initialized:
+    - Before constructor for the base class (that doesn't extent anything)
+    - Immediately after 'super()' for the derived class
+
+    In our case, 'Rabbit' is the derived class. There's no 'contructor()' in it. As said previously,
+    that's the same as if there was an empty constructor with only 'super(...args)'.
+
+    So, 'new Rabbit()' calls 'super()', thus executing the parent constructor, and (per the rule for
+    derived classes) only after that is class fields are initialized. At the time of the parent constructor
+    execution, there are no 'Rabbit' class field yet, that's why 'Animal' fields are used.
+
+    This suble difference between fields and methods is specific to JavaScript.
+
+    This behavior only reveals itself if an overriden field is used in the parent constructor.
+    
+    If it becomes a problem, one can fix it by using methods or getters/setters instead of fields.
+*/
+class Animal2 {
+  showName() {
+    // instead of this.name = 'animal'
+    console.log("animal");
+  }
+  constructor() {
+    this.showName(); // instead of console.log(this.name);
+  }
+}
+class Rabbit6 extends Animal2 {
+  showName() {
+    console.log("rabbit");
+  }
+}
+new Animal2(); // animal
+new Rabbit6(); // rabbit
