@@ -130,3 +130,86 @@ let longEar2 = {
 
 // works correctly
 longEar2.eat(); // Long Ear eats.
+
+///////////////////////
+// Methods are not free
+///////////////////////
+
+/*
+  As we've known before, generally functions are "free", not bound to objects in JavaScript. So they
+  can be copied between objects and called with another 'this'.
+
+  The very existence of [[HomeObject]] violates that principle. because methods remember
+  their objects. [[HomeObject]] can't be changed, so this bond is forever.
+
+  The only place in the language where [[HomeObject]] is used - is 'super'. So if a method
+  doesn't user 'super' we still can consider it free and copy between objects. But with
+  'super' things may go wrong.
+*/
+
+let animal3 = {
+  sayHi() {
+    console.log(`I'm an animal`);
+  },
+};
+// rabbit inherits from animal
+let rabbit3 = {
+  __proto__: animal3,
+  sayHi() {
+    super.sayHi();
+  },
+};
+
+let plant = {
+  sayHi() {
+    console.log("I'm a plant");
+  },
+};
+
+// tree inherits from plant
+let tree = {
+  __proto__: plant,
+  sayHi: rabbit3.sayHi,
+};
+
+tree.sayHi(); // I'm an animal
+
+/*
+  A call to 'tree.sayHi()' show "I'm an animal".
+
+  The reason is:
+  - In the objet tree, the method 'tree.sayHi' was copied from 'rabbit'. Maybe we just wanted
+  to avoid code duplication.
+
+  - Its [[HomeObject]] is 'rabbit', as it was created in 'rabbit'. There's no way to change
+  [[HomeObject]].
+
+  - The code of 'tree.sayHi()' has 'super.sayHi()' inside. It goest up from 'rabbit' and 
+  takes the method from 'animal'. 
+*/
+
+///////////////////////////////////
+// Methods, not function properties
+///////////////////////////////////
+/*
+  [[HomeObject]] is defined for methods both in classes and in plain objects. But for objects,
+  methods must be specified exactly as 'method()', not as "method: function()".
+
+  The difference may be non-essential for us, but it's important for JavaScript.
+
+  In the example below a non-method syntax is used for comparasion. [[HomeObject]] property
+  is not set and the inheritance doesn't work.
+*/
+
+let animal4 = {
+  eat: function () {
+    // intentionally writing like this instead of eat() {...
+    // ...
+  },
+};
+let rabbit4 = {
+  __proto__: animal4,
+  eat: function () {
+    // super.eat(); // SyntaxError: 'super' keyword unexpected here
+  },
+};
