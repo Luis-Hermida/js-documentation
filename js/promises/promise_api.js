@@ -192,3 +192,85 @@ Promise.race([
   ),
   new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
 ]).then(console.log); // 1
+
+/////////////////////////////////
+/*
+    Promise.any
+
+    Similar to 'Promise.race', but waints only for the first fulfilled promise and gets its results. If all
+    of the given promises are rejected then the returned promise is rejected with 'AggregateError' -
+    a special error object that stores all promise error in its 'errors' property.
+
+    Syntax:
+    let promise = Promise.any(iterable);
+
+    For instance, here the result will be '1', because the first promise here was the fastest, but it was
+    rejected, so the second promise became the result. All further results are ignored.
+*/
+
+Promise.any([
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Whoops!")), 1000)
+  ),
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+]).then(console.log); // 1
+
+/*
+    Here's an aexample when all promises fail, as you can see error objects for failed promises are available
+    in the 'errors' property of the 'AggregateError' object.
+*/
+Promise.any([
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Ouch!")), 1000)
+  ),
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Error!")), 2000)
+  ),
+]).catch((error) => {
+  console.log(error.constructor.name); // AggregateError
+  console.log(error.errors[0]); // Error: Ouch!
+  console.log(error.errors[1]); // Error: Error!
+});
+
+/////////////////////////////////
+/*
+    Promise.resolve/reject
+
+    Methods 'Promise.resolve' and 'Promise.reject' are rarely needed in modern code,
+    because 'async/await' syntax makes them somewhat obsolete.
+
+    Promise.resolve
+    Creates a resolved promise with the result 'value'.
+
+    Sames as:
+    let promise = new Promise(resolve => resolve(value));
+
+    The method is used for compatibility, when a funCtion is expected to return a promise.
+    For example, the 'loadCached' funciton below fetches a URL and remembers (caches) its
+    content. For future calls with the same URL it immediately gets the previous content form cache,
+    but uses 'Promise.resolve' to make a promise of it, so the returned value is always a promise./
+
+    We can write 'loadCached(url).then(...)', because the function is guaranteed to return a
+    promise. We can always use '.then' after 'loadedCached'. That's the purpose of
+    'Promise.resolve' in (*).m
+*/
+let cache = new Map();
+function loadCached(url) {
+  if (cache.has(url)) {
+    return Promise.resolve(cache.get(url)); // (*)
+  }
+
+  return fetch(url)
+    .then((response) => response.text())
+    .then((text) => {
+      cache.set(url, text);
+      return text;
+    });
+}
+
+/*
+    Promise.reject creates a rejected promise with 'error'.
+
+    let promise = new Promise((resolve, reject) => reject(error));
+*/
