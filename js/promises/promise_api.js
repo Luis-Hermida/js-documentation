@@ -102,3 +102,93 @@ Promise.all([
 
     So we are able to pass ready values to 'Promise.all' where convenient.
 */
+
+/////////////////////////////////
+/*
+    Promise.allSettled
+
+    Warning: This is a recent addition to the language. Old browsers may need polyfills.
+
+    'Promise.allSettled' just waits for all promises to settle, regardless of the result. The
+    resulting array has:
+
+    '{status:"fulfilled", value:result}' for successful responses,
+    '{status:"rejected", reason:error}' for errors.
+
+    So for each promise we get its status and 'value/error'.
+*/
+
+let urls = [
+  "https://api.github.com/users/iliakan",
+  "https://api.github.com/users/remy",
+  "https://no-such-url",
+];
+Promise.allSettled(urls.map((url) => fetch(url))).then((results) => {
+  // (*)
+  results.forEach((result, num) => {
+    if (result.status == "fulfilled") {
+      console.log(`${urls[num]}: ${result.value.status}`);
+    }
+    if (result.status == "rejected") {
+      console.log(`${urls[num]}: ${result.reason}`);
+    }
+  });
+});
+
+/*
+    Results: 
+    [
+        {status: 'fulfilled', value: ...response...},
+        {status: 'fulfilled', value: ...response...},
+        {status: 'rejected', reason: ...error object...}
+    ]
+*/
+
+/*
+    Promise.allSettled Polyfill
+
+    In this coide, 'promises.map' takes input values, turns them into promises (just in case a non-
+    promise was passed) with 'p => Promise.resolve(p)', and then adds '.then' handler to every one.
+
+    That handler turns a sucessful result 'value' into '{status:'fulfilled', value}', and an
+    error 'reason' into '{status:'rejected', reason}'. That's exactly the format of 
+    'Promose.allSettled'.
+
+    Now we can use 'Promise.allSettled' to get the results of all given promises, even if some of
+    them are rejected.
+*/
+if (!Promise.allSettled) {
+  const rejectHandler = (reason) => ({ status: "rejected", reason });
+  const resolveHandler = (value) => ({ status: "fulfilled", value });
+
+  Promise.allSettled = function (promises) {
+    const convertedPromises = promises.map((p) =>
+      Promise.resolve(p).then(resolveHandler, rejectHandler)
+    );
+
+    return Promise.all(convertedPromises);
+  };
+}
+
+/////////////////////////////////
+/*
+    Promise.race
+
+    Similar to 'Promise.all', but waits only for the first settled promise
+    and gets its results (or error).
+
+    Syntax:
+    let promise = Promise.race(iterable);
+
+    The first promise here was the fastest, so it became the reuslt. After the first settled
+    promise "wins the race", al further results/errors are ignored.
+
+*/
+
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("Whoops!")), 2000)
+  ),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+]).then(console.log); // 1
