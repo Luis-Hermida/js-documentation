@@ -33,8 +33,8 @@ console.log("code finished"); // this console.log shows first
     and previously queued handlers are finished. 
 */
 Promise.resolve()
-.then(() => console.log("promise done!"))
-.then(() => console.log("code finished"));
+  .then(() => console.log("promise done!"))
+  .then(() => console.log("code finished"));
 
 /*
     Unhandled rejection
@@ -49,9 +49,11 @@ Promise.resolve()
     Normally, if we expect and error, we add '.catch' to the promise chain to handle it:
 */
 let promise2 = Promise.reject(new Error("Promise Failed!"));
-promise2.catch(err => console.log('caught'));
+promise2.catch((err) => console.log("caught"));
 // doesn't run: error handled
-window.addEventListener('unhandledrejection', event => console.log(event.reason));
+window.addEventListener("unhandledrejection", (event) =>
+  console.log(event.reason)
+);
 
 /*
     But if we forget to add '.catch', then, after the microtask queue is empty, the engine triggers the
@@ -59,15 +61,19 @@ window.addEventListener('unhandledrejection', event => console.log(event.reason)
 */
 let promise3 = Promise.reject(new Error("Promise Failed!"));
 // Promise Failed!
-window.addEventListener('unhandledrejection', event => console.log(event.reason));
+window.addEventListener("unhandledrejection", (event) =>
+  console.log(event.reason)
+);
 
 /*
     What if we handle the error later?
 */
 let promise4 = Promise.reject(new Error("Promise Failed!"));
-setTimeout(() => promise4.catch(err => console.log('caught')), 1000);
+setTimeout(() => promise4.catch((err) => console.log("caught")), 1000);
 // Error: Promise Failed!
-window.addEventListener('unhandledrejection', event => console.log(event.reason));
+window.addEventListener("unhandledrejection", (event) =>
+  console.log(event.reason)
+);
 /*
     Now, if we run it, we'll see 'Promise Failed!' first and the 'caught'.
 
