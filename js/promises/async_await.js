@@ -65,3 +65,84 @@ async function f3() {
   console.log(result); // "done!"
 }
 f3();
+
+/*
+    Warning: Can't use 'await' on regular functions
+
+    If we try to use 'await' in a non-async function, there would be a syntax error:
+
+    We may get this error if we forget to put async before a function. As stated earlier, await
+    only works inside an async function
+
+    function f() {
+        let promise = Promise.resolve(1);
+        let result = await promise; // Syntax error
+    }
+*/
+
+/*
+    Information: Modern browsers allow top-level 'await' in modules
+
+    In modern browsers, 'await' on top level works just fine, when we're inside a module.
+
+    For instance:
+    // we assume this code runs at top level, inside a module
+    let response = await fetch('/article/promise-chaining/user.json');
+    let user = await response.json();
+    console.log(user);
+
+    If we're not using modules, or older browsers must be supported, there's a universal
+    recipe: werapping inot an anonymous async function.
+
+    Like this:
+    (async () => {
+        let response = await fetch('/article/promise-chaining/user.json');
+        let user = await response.json();
+        ...
+    })();
+*/
+
+/*
+    Information: 'await' accepts "thenables"
+
+    Like 'promise.then', 'await' allow us to use thenable objects (those with a callable 'then'
+    method). The idea is that a third-party object may not be a promise, but promise-compatible:
+    if it supports '.then', that's enough to use it with 'await'.
+
+    If 'await' gets a non-promise object with '.then', it calls that method providing the built-in
+    functions 'resolve' and 'reject' arguments (just as it does for a regular 'Promise' executor).
+    Then 'await' waits until one of them is called (in the example below it happens in the line (*))
+    and then proceeds with the result.
+*/
+class Thenable {
+  constructor(num) {
+    this.num = num;
+  }
+  then(resolve, reject) {
+    alert(resolve);
+    // resolve with this.num*2 after 1000ms
+    setTimeout(() => resolve(this.num * 2), 1000); // (*)
+  }
+}
+
+async function f4() {
+  // waits for 1 second, then result becomes 2
+  let result = await new Thenable(1);
+  alert(result);
+}
+f4();
+
+/*
+    Information: Async class methods
+
+    To declare an async class method, just prepend it with 'async':
+
+    The meaning is the same: it ensures that the return value is a promise and enables 'await'.
+*/
+
+class Waiter {
+  async wait() {
+    return await Promise.resolve(1);
+  }
+}
+new Waiter().wait().then(console.log); // 1 (this is the same as (result => console.log(result)))
