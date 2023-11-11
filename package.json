@@ -1,0 +1,13 @@
+{
+  "name": "js-documentation",
+  "version": "1.0.0",
+  "description": "playground/guide while reading modern js tutorial",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
