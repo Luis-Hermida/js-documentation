@@ -144,3 +144,36 @@ config.user = "Pepe";
 
 import { sayHi } from "./modules_scripts/sample_module_features.js";
 sayHi();
+
+/*
+    //////////
+    // import.meta
+    //////////
+
+    The object 'import.meta' contains the information about the current module.
+
+    Its content depends on the environment. In the browser, it contains the URL for the scripts or a
+    current webpage URL if inside a HTML
+*/
+import { printMeta } from "./modules_scripts/sample_module_features.js";
+printMeta();
+
+/*
+    //////////
+    // In a module, "this" is undefined
+    //////////
+
+    That's kind of a minor feature, but for completeness we should review it.
+
+    In a module, top-level 'this' is undefined.
+
+    Compare it to non-module scripts, where 'this' is a global object:
+
+    <script>
+        console.log(this); // window
+    </script>
+
+    <script type="module">
+        console.log(this); // undefined
+    </script>
+*/
