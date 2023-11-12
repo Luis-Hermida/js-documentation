@@ -13,3 +13,9 @@ export function sayHi() {
 export function printMeta() {
   console.log(import.meta);
 }
+
+export function printMeta2() {
+  console.log(import.meta);
+}
+
+export { printMeta2 as meta2 };
