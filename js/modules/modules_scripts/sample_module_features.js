@@ -19,3 +19,9 @@ export function printMeta2() {
 }
 
 export { printMeta2 as meta2 };
+
+export default class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
