@@ -88,7 +88,7 @@
     // External Scripts
     //////////
 
-    Exter scriptpps that have 'type="module"' are different in 2 aspects:
+    Exter scriptps that have 'type="module"' are different in 2 aspects:
 
     1. External scripts with the same 'src' only run once:
     `
