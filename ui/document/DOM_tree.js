@@ -133,3 +133,29 @@
                     #text 1
     ``
 */
+
+
+/*
+    Other node types
+
+    There are some other node types besides elements and text nodes like comments.
+
+    We may think, why is there a comment being added to the DOM, but it respects the rule of
+    'if something's in HTML, then it also must be in the DOM tree'.
+
+    Everything in HTML, even comments, becomes a part of the DOM.
+    
+    Even the '<!DOCTYPE...>' directive at the very beginning of HTML is also a DOM
+    node. It’s in the DOM tree right before '<html>'. Few people know about that. We are
+    not going to touch that node, we even don’t draw it on diagrams, but it’s there.
+
+    The 'document' object that represents the whole document is, formally, a DOM node
+    as well.
+
+    There are 12 node types https://dom.spec.whatwg.org/#node. In practice we usually work with 4 of them:
+    1. document – the “entry point” into DOM.
+    2. element nodes – HTML-tags, the tree building blocks.
+    3. text nodes – contain text.
+    4. comments – sometimes we can put information there, it won’t be shown, but JS can
+    read it from the DOM.
+*/
