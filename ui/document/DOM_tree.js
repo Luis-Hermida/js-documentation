@@ -89,3 +89,47 @@
     On further DOM pictures we'll sometimes omit them when they are irrelevant.
     Such spaces usually don't affect how the document is displayed.
 */
+
+/*
+    Autocorrection
+
+    If the browsers encounters malformed HTML, it automatically corrects it when making
+    the DOM.
+
+    For instance, the top tag is always '<html>'. Even if it doesn't exist in the document, it
+    will exist in the DOM, because the browser will create it. The same goes for '<body>'.
+
+    As an example, if the HTML file is the single word "Hello", the browser will werap it into
+    '<html>' and '<body>', and add the required '<head>', and the DOM will be:
+
+    ``
+        HTML
+            HEAD
+            BODY
+            #tet "Hello"
+    ``
+
+    While generating the DOM, browsers automatically process errors in the document, close tags and so
+    on.
+
+    A document with unclosed tags, will become a normal DOM as the browsers reads tags and restores
+    the missing parts.
+*/
+/*
+    !Warning: Tables always have '<tbody>'
+
+    An interesting "special case" is tables. By DOM specification they must have '<tbody>' tag,
+    but HTML text amy omit it. Then the browser creates '<tbody>' in the DOM automatically.
+
+    <table id="table"><tr><td>1</td></tr></table>
+
+    And the DOM will be
+
+    ``
+    TABLE
+        TBODY
+            TR
+                TD
+                    #text 1
+    ``
+*/
